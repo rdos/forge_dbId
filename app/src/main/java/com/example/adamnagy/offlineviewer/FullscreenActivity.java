@@ -8,50 +8,8 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebResourceRequest;
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.net.Uri;
-import java.io.InputStream;
 
-import java.io.IOException;
 
-class ViewerWebViewClient extends WebViewClient {
-
-    Context context;
-
-    public ViewerWebViewClient(Context con) {
-        this.context = con;
-    }
-
-    public WebResourceResponse shouldInterceptRequest (WebView view,
-                                                       WebResourceRequest request) {
-        try {
-            Uri uri = request.getUrl();
-            String path = uri.getPath();
-            if (path.startsWith("/android_asset/")) {
-                try {
-                    AssetManager assetManager = this.context.getAssets();
-                    String relPath = path.replace("/android_asset/", "").replace("gz", "gz.mp3");
-                    InputStream stream = assetManager.open(relPath);
-                    return new WebResourceResponse(null, null, stream);
-                } catch (IOException ex) {
-                    String str = ex.getMessage();
-                }
-            }
-        } catch (Exception ex) { }
-
-        return null;
-    }
-}
-
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class FullscreenActivity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -133,9 +91,9 @@ public class FullscreenActivity extends AppCompatActivity {
         mControlsView = findViewById(R.id.myWebView);
         mContentView = findViewById(R.id.myWebView);
 
-        WebView webView = (WebView)findViewById(R.id.myWebView);
+        android.webkit.WebView webView = (android.webkit.WebView)findViewById(R.id.myWebView);
         webView.setWebContentsDebuggingEnabled(true);
-        webView.setWebViewClient(new ViewerWebViewClient(getBaseContext()));
+        webView.setWebViewClient(new WebViewTTest(getBaseContext()));
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
